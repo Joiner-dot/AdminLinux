@@ -1,0 +1,179 @@
+#!/bin/bash
+
+#1
+rm -r ~/test
+
+cd ~
+mkdir test
+read 
+
+#2
+directory=0
+files=0
+cd test
+for File in /etc/*; do
+	if [[ -d "$File" ]]; then 
+		echo "$File/" >> list
+		let directory=$directory+1
+	else
+		echo "$File" >> list
+	fi
+done
+
+for File in /etc/.*; do
+	if [[ -d "$File" ]]; then
+		echo "$File/" >> list
+	else
+		let files=$files+1
+		echo "$File" >> list
+	fi
+done
+read
+
+#3
+
+echo "Files = "  $files >> list
+echo "Directories = "  $directory >> list
+read
+
+#4
+mkdir links
+read
+
+#5
+ln ~/test/list ~/test/links/list_hlink
+read
+
+#6
+ln -s ~/test/list ~/test/links/list_slink
+read
+
+#7
+echo "list" 
+ls -l ~/test/list | cut -d " " -f2
+echo "list_hlink" 
+ls -l ~/test/links/list_hlink | cut -d " " -f2
+echo "list_slink" 
+ls -l ~/test/links/list_slink | cut -d " " -f2
+read
+
+#8
+wc -l ~/test/list | cut -d " " -f1 >> ~/test/links/list_hlink
+read
+
+#9
+file1=~/test/links/list_hlink
+file2=~/test/links/list_slink
+if cmp $file1 $file2;
+then
+	echo "YES"
+fi
+read
+
+#10
+mv ~/test/list ~/test/list1
+read
+
+#11
+if cmp $file1 $file2;
+then
+	echo "YES"
+fi
+read
+
+#12
+rm ~/list_link
+ln ~/test/list1 ~/list_link
+read
+
+#13
+find /etc -name "*.conf" 2>/dev/null > ~/list_conf
+read
+
+#14
+find /etc -name "*.d" 2>/dev/null > ~/list_d
+read
+
+#15
+cat ~/list_conf ~/list_d > ~/list_conf_d
+read
+
+#16
+mkdir ~/test/.sub
+read
+
+#17
+cp ~/list_conf_d ~/test/.sub/
+read
+
+#18
+cp -b ~/list_conf_d ~/test/.sub/
+read
+
+#19
+find ~/test/ -name "*" 2>/dev/null
+read
+
+#20
+man man > ~/man.txt
+read
+
+#21
+split -b 1024 ~/man.txt copy.
+read
+
+#22
+rm -r /root/man.dir
+mkdir ~/man.dir
+read
+
+#23
+mv copy.* ~/man.dir
+read
+
+#24
+cat ~/man.dir/copy.* > ~/man.dir/man.txt
+rm ~/man.dir/copy.*
+read
+
+#25
+if cmp -s ~/man.dir/man.txt ~/man.txt;
+then
+	echo "YES"
+fi
+read
+
+#26
+echo "First 
+Part
+at 
+the 
+beggining" > ~/man.txt2 
+cat ~/man.txt >> ~/man.txt2
+cat ~/man.txt2  > ~/man.txt
+echo "Second 
+Part 
+at 
+the 
+end" >> ~/man.txt
+rm ~/man.txt2
+read
+
+#27
+diff -u ~/man.txt ~/man.dir/man.txt > ~/difference
+read
+
+#28
+mv ~/difference ~/man.dir/
+read
+
+#29
+patch ~/man.dir/man.txt ~/man.dir/difference
+read
+
+#30
+if cmp -s ~/man.txt ~/man.dir/man.txt;
+then
+	echo "YES"
+fi
+

@@ -1,0 +1,63 @@
+#!/bin/bash
+
+#1 
+#fdisk /dev/sda
+ #       n - new partition 
+#	p - primary
+#	+300M - size
+#	w - write
+#2
+#rm -f UUID
+#sudo blkid /dev/sda3 | cut -d "\"" -f2 > UUID
+#3
+#mkfs.ext4 -b 4096 /dev/sda3
+#4
+#dumpe2fs -h /dev/sda3
+#5
+#tune2fs -i 2m -C 2 /dev/sda3
+#6
+#mkdir /mnt/newdisk
+#mount -t ext4 /dev/sda3 /mnt/newdisk
+#7
+#ln -s /mnt/newdisk ~/newdisklink
+#8
+#mkdir /mnt/newdisk/newdir
+#9
+#/dev/sda3 /mnt/newdisk ext4 noexec,noatime 0 0
+#reboot
+#10
+#fdisk /dev/sda
+  # d
+  # 3
+  # n
+  # p
+  # 3
+  # +350M
+ #  w
+#reboot
+#resize2fs /dev/sda3
+#df -h 
+#11
+#e2fsck -n /dev/sda3
+#12
+#mkfs.ext4 /dev/sda4
+#umount /dev/sda3
+#mke2fs -O journal_dev /dev/sda4
+#mke2fs -J device=/dev/sda4 /dev/sda3
+#13 
+#fdisk /dev/sda
+#n
+#default
+#+100M
+#14
+#pvcreate /dev/sda3 /dev/sda4
+#vgcreate tom /dev/sda3 /dev/sda4
+#lvcreate -L 190M -n lv1 tom
+#mkfs.ext4 /dev/tom/lv1
+#mkdir /mnt/log
+#mount /dev/tom/lv1 /mnt/log
+#15
+#mkdir -p /mnt/share
+#sudo mount.cifs //192.168.1.38/Hello /mnt/share -o user=Egor
+#16
+echo "//192.168.1.38/Hello /mnt/share cifs user=Egor,password=8951fdsa,rw,iocharset=utf8 0 0" >> /etc/fstab

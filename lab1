@@ -160,7 +160,8 @@ rm ~/man.txt2
 read
 
 #27
-diff -u ~/man.txt ~/man.dir/man.txt > ~/difference
+:w
+:q
 read
 
 #28
